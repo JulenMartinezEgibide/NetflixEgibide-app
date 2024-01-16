@@ -16,3 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/InicioSesion', function () {
+    return "Ruta con nombre!";
+})->name('InicioSesion.index');
