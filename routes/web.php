@@ -17,6 +17,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/InicioSesion', function () {
-    return "Ruta con nombre!";
-})->name('InicioSesion.index');
+Route::get('/login', function () {
+    return view('login');
+})->name('login');
