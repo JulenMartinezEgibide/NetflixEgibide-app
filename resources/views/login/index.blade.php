@@ -8,7 +8,8 @@
 </head>
 <body>
     <div class="login-container">
-        <form class="login-form">
+        <form class="login-form" method="POST" action="{{ route('login') }}">
+          @csrf
           <h1>Egibide Netflix</h1>
           <p>Porfavor entre en su cuenta</p>
           <div class="input-group">

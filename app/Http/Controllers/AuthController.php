@@ -3,14 +3,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public function showLoginForm()
+    public function index()
     {
-        return view('login');
+        return view('login.index');
     }
 
     public function login(Request $request)
@@ -20,9 +21,10 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
+        $usuario = Usuario::where('username', $credentials['username'])->first();
+
         // Intento de autenticación utilizando el modelo Usuario
-        if (Auth::attempt($credentials)) {
-            $usuario = Auth::user();
+        if ($usuario && $usuario->password == $credentials['password']) {
 
             // Redirigir según el tipo de usuario
             if ($usuario->type == 'Admin') {

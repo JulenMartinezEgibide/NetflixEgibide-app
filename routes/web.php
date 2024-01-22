@@ -21,17 +21,17 @@ Route::get('/', function () {
 });
 
 // Ruta para mostrar el formulario de inicio de sesión
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::get('/login', [AuthController::class, 'index'])->name('login.index');
 
 // Ruta para procesar la autenticación
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 // Rutas para el administrador
-Route::group(['middleware' => ['auth', 'admin']], function () {
-    Route::get('/admin', [AdminController::class, 'showIndex'])->name('admin.index');
+Route::group(['prefix' => 'admin'], function () {
+    Route::get('/', [AdminController::class, 'index'])->name('admin.index');
 });
 
 // Rutas para el alumno
-Route::group(['middleware' => ['auth', 'alumno']], function () {
-    Route::get('/alumno',  [AlumnoController::class, 'showIndex'])->name('alumno.index');
+Route::group(['prefix' => 'alumno'], function () {
+    Route::get('/',  [AlumnoController::class, 'index'])->name('alumno.index');
 });

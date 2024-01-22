@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class AlumnoController extends Controller
 {
-    public function showIndex()
+    public function index()
     {
         // Lógica para la vista del dashboard del administrador
         return view('alumno.index');
