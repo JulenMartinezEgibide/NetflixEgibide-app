@@ -86,3 +86,52 @@
     }
   }
   
+  .navbar {
+    background-color: purple;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    animation: fadeIn 0.5s ease-in-out forwards;
+  }
+  
+  .navbar-menu {
+    display: flex;
+    align-items: center;
+    height: 60px;
+    padding: 0 20px;
+  }
+  
+  .navbar-item {
+    list-style: none;
+  }
+
+  .navbar-item-right {
+    list-style: none;
+    margin-left: auto;
+  }
+  
+  .navbar-link {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  }
+  
+  .navbar-link:hover {
+    background-color: #fff;
+    color: #000;
+  }
+
+  
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+ 
