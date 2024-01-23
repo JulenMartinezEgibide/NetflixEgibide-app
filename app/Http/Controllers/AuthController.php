@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Usuario;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -28,9 +27,10 @@ class AuthController extends Controller
 
             // Redirigir según el tipo de usuario
             if ($usuario->type == 'Admin') {
-                return redirect()->route('admin.index');
+                // Redirigir a la página de administrador pasando el tipo de usuario
+                return redirect()->route('pelicula.index')->with(['userType' => 'Admin', 'userId' => $usuario->id]);
             } else {
-                return redirect()->route('alumno.index');
+                return redirect()->route('pelicula.index')->with(['userType' => 'Alumno', 'userId' => $usuario->id]);
             }
         }
 

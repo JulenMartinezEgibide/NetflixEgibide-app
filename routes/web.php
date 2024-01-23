@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AlumnoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PeliculaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,7 +18,7 @@ use App\Http\Controllers\AuthController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login.index');
 });
 
 // Ruta para mostrar el formulario de inicio de sesión
@@ -28,10 +29,10 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 // Rutas para el administrador
 Route::group(['prefix' => 'admin'], function () {
-    Route::get('/', [AdminController::class, 'index'])->name('admin.index');
+    Route::get('/', [PeliculaController::class, 'index'])->name('pelicula.index');
 });
 
 // Rutas para el alumno
 Route::group(['prefix' => 'alumno'], function () {
-    Route::get('/',  [AlumnoController::class, 'index'])->name('alumno.index');
+    Route::get('/',  [PeliculaController::class, 'index'])->name('pelicula.index');
 });

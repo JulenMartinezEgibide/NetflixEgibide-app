@@ -10,14 +10,30 @@
     background-size: cover;
     background-position: center;
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f2f2f2;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
   }
+
+  /*Grid*/
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(4, 25%);
+    grid-template-rows: auto, 50%, 50%, auto;
+    gap: 0px 0px;
+    grid-template-areas: 
+    "nav nav nav nav" 
+    ". search . ." 
+    ". content content ." 
+    "footer footer footer footer";
+    height: 100%;
+    width: 100%;
+  }
   
+  /* Login */
   .login-container {
     background-color: #fff;
     border-radius: 10px;
@@ -77,7 +93,6 @@
     background-color: #0056b3;
   }
   
-  
   /* Responsive */
   @media screen and (max-width: 600px) {
     .login-container {
@@ -86,7 +101,9 @@
     }
   }
   
+  /* Navbar */
   .navbar {
+    grid-area: nav;
     background-color: purple;
     position: fixed;
     top: 0;
@@ -124,7 +141,6 @@
     color: #000;
   }
 
-  
   @keyframes fadeIn {
     0% {
       opacity: 0;
@@ -134,4 +150,74 @@
     }
   }
   
- 
+  /*Buscador*/
+  .search-container {
+    grid-area: search;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    max-width: 400px;
+    width: 90%;
+    height: fit-content;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.search-form {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.second-input-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+}
+
+#selector {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+#selector:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+#search-button {
+    margin-left: 10px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    background-color: purple;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+#search-button:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+/*Footer*/
+footer {
+    grid-area: footer;
+    background-color: purple;
+    color: #fff;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    text-align: center;
+    padding: 20px;
+}
