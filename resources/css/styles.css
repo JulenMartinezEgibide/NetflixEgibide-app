@@ -21,14 +21,14 @@
 
   .grid-container {
     display: grid;
-    grid-template-columns: repeat(4, 25%);
-    grid-template-rows: auto, 50%, 50%, auto;
-    gap: 0px 0px;
-    grid-template-areas: 
-    "nav nav nav nav" 
-    ". search . ." 
-    ". content content ." 
-    "footer footer footer footer";
+    grid-template-columns: repeat(2, 50%);
+    grid-template-rows: min-content min-content 1fr min-content;
+    gap: 10px 0px;
+    grid-template-areas:
+        "nav nav"
+        "search admin"
+        "content content "
+        "footer footer ";
     height: 100%;
     width: 100%;
   }
@@ -93,24 +93,14 @@
     background-color: #0056b3;
   }
   
-  /* Responsive */
-  @media screen and (max-width: 600px) {
-    .login-container {
-      width: 100%;
-      border-radius: 0;
-    }
-  }
-  
   /* Navbar */
   .navbar {
     grid-area: nav;
     background-color: purple;
-    position: fixed;
-    top: 0;
-    left: 0;
     width: 100%;
     z-index: 100;
     animation: fadeIn 0.5s ease-in-out forwards;
+    height: fit-content;
   }
   
   .navbar-menu {
@@ -208,16 +198,75 @@
     color: #fff;
 }
 
+/*Admin*/
+
+.admin-container {
+    grid-area: admin;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    width: 90%;
+    height: fit-content;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.admin-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 100%;
+    margin-top: 10px;
+}
+a.button-link {
+  display: inline-block;
+  padding: 10px 20px; /* Ajusta el padding según sea necesario */
+  background-color: purple;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+a.button-link:hover {
+  background-color: #007bff;
+  color: #fff;
+}
+
 /*Footer*/
 footer {
     grid-area: footer;
     background-color: purple;
     color: #fff;
-    position: fixed;
-    bottom: 0;
-    left: 0;
     width: 100%;
     z-index: 100;
     text-align: center;
     padding: 20px;
+    height: fit-content;
+}
+
+/* Responsive */
+@media screen and (max-width: 600px) {
+  .login-container {
+    width: 100%;
+    border-radius: 0;
+  }
+  .search-form {
+    flex-direction: column;
+    align-items: center;
+}
+
+.second-input-group {
+    margin-right: 0;
+    margin-top: 10px; /* Espaciado superior para la versión de columna */
+}
+
+#selector {
+    margin-bottom: 10px; /* Agrega margen inferior al elemento #selector en versión de columna */
+}
+
+#search-button {
+    margin-top: 10px; /* Agrega margen superior al elemento #search-button en versión de columna */
+}
 }

@@ -12,7 +12,7 @@
         <ul class="navbar-menu">
           <li class="navbar-item"><a href="#" class="navbar-link">Peliculas</a></li>
           <li class="navbar-item"><a href="#" class="navbar-link">Series</a></li>
-          <li class="navbar-item navbar-item-right"><a href="#" class="navbar-link">Cerrar sesion</a></li>
+          <li class="navbar-item navbar-item-right"><a href=" {{ route('login.index') }} " class="navbar-link">Cerrar sesion</a></li>
         </ul>
     </nav>
     
@@ -29,6 +29,17 @@
             <button type="submit" id="search-button">Buscar</button>
         </form>
     </div>
+
+    @if(session('user') && session('user')['type'] == 'Admin')
+        
+            <div class="admin-container">
+                <h2>Herramientas del administrador</h2>
+                <div class="admin-buttons">
+                    <a href="#" class="button-link">Añadir película</a>
+                </div>
+            </div>
+        
+    @endif
     
     <footer class="footer">
         <p>&copy; 2023 My Website. All rights reserved.</p>

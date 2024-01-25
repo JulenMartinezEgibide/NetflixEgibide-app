@@ -25,12 +25,17 @@ class AuthController extends Controller
         // Intento de autenticación utilizando el modelo Usuario
         if ($usuario && $usuario->password == $credentials['password']) {
 
+            $user = $usuario->toArray();
+
+            // Persistir el usuario en la sesión
+            $request->session()->put('user', $user);
+
             // Redirigir según el tipo de usuario
             if ($usuario->type == 'Admin') {
                 // Redirigir a la página de administrador pasando el tipo de usuario
-                return redirect()->route('pelicula.index')->with(['userType' => 'Admin', 'userId' => $usuario->id]);
+                return redirect()->route('admin.pelicula.index');
             } else {
-                return redirect()->route('pelicula.index')->with(['userType' => 'Alumno', 'userId' => $usuario->id]);
+                return redirect()->route('alumno.pelicula.index');
             }
         }
 
