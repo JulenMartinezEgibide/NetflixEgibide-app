@@ -29,10 +29,12 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 // Rutas para el administrador
 Route::group(['prefix' => 'admin'], function () {
-    Route::get('/', [PeliculaController::class, 'index'])->name('admin.pelicula.index');
+    Route::get('/pelicula', [PeliculaController::class, 'index'])->name('admin.pelicula.index');
+    Route::get('/pelicula/create', [PeliculaController::class, 'create'])->name('admin.pelicula.create');
+    Route::post('/pelicula', [PeliculaController::class, 'store'])->name('admin.pelicula.store');
 });
 
 // Rutas para el alumno
 Route::group(['prefix' => 'alumno'], function () {
-    Route::get('/',  [PeliculaController::class, 'index'])->name('alumno.pelicula.index');
+    Route::get('/pelicula',  [PeliculaController::class, 'index'])->name('alumno.pelicula.index');
 });

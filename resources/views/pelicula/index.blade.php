@@ -35,11 +35,30 @@
             <div class="admin-container">
                 <h2>Herramientas del administrador</h2>
                 <div class="admin-buttons">
-                    <a href="#" class="button-link">Añadir película</a>
+                    <a href="{{ route('admin.pelicula.create') }}" class="button-link">Añadir película</a>
                 </div>
             </div>
         
     @endif
+
+    <div class="content-container">
+        <h2>Peliculas</h2>
+        <div class="peliculas-grid">
+            @foreach($peliculas as $pelicula)
+                <div class="pelicula-card">
+                    <div class="pelicula-card-header">
+                        <h3>{{ $pelicula['Nombre'] }}</h3>
+                    </div>
+                    <div class="pelicula-card-body">
+                        <img src="{{ $pelicula['ArchivoImagen'] }}" alt="Imagen de la pelicula">
+                    </div>
+                    <div class="pelicula-card-footer">
+                        <a href="{{ route('pelicula.show', $pelicula['id']) }}" class="button-link">Ver</a>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
     
     <footer class="footer">
         <p>&copy; 2023 My Website. All rights reserved.</p>
