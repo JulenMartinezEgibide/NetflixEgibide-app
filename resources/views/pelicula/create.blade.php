@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="login-container">
-        <form class="login-form" method="POST" action="{{ route('admin.pelicula.store') }}">
+        <form class="login-form" method="POST" action="{{ route('admin.pelicula.store') }}" enctype="multipart/form-data">
           @csrf
           <h1>Egibide Netflix</h1>
           <p>Formulario para peliculas</p>
@@ -42,7 +42,7 @@
             <div class="input-group">
                 <button type="submit">Añadir</button>
             
-                <a href=" {{ route('admin.pelicula.index') }} " class="button-link">Volver</a>
+                <a href=" {{ route('admin.pelicula.store') }} " class="button-link">Volver</a>
             </div>
         </form>
       </div>

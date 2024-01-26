@@ -23,13 +23,15 @@ class PeliculaController extends Controller
         //Por cada pelicula, coger el Nombre, Categoria, ArchivoImagen y id
         foreach($peliculas as $pelicula){
 
-            //Conseguir la imagen de la pelicula del disco
-            $rutaImagen = asset(Storage::disk($this->disk)->get($pelicula->ArchivoImagen));
+            //Conseguir la url de la imgen de la pelicula del disco
+            $rutaImagen = asset("storage/{$pelicula->ArchivoImagen}");
+            $rutaVideo = asset("storage/{$pelicula->ArchivoVideo}");
 
             $listaPeliculas[] = [
                 'Nombre' => $pelicula->Nombre,
                 'Categoria' => $pelicula->Categoria,
                 'ArchivoImagen' => $rutaImagen,
+                'ArchivoVideo' => $rutaVideo,
                 'id' => $pelicula->id,
             ];
         }
@@ -51,12 +53,12 @@ class PeliculaController extends Controller
     {
         // Lógica para guardar la película en la base de datos
 
-        if($request->isMethod('post')) {
-            $fileImage = $request->file('imagen');
+        if($request->isMethod('post') && $request->hasFile('img') && $request->hasFile('video')){
+            $fileImage = $request->file('img');
             $fileVideo = $request->file('video');
             
-            $nombreImagen = $request->input('imgName');
-            $nombreVideo = $request->input('videoName');
+            $nombreImagen = $request->input('ArchivoImagen');
+            $nombreVideo = $request->input('ArchivoVideo');
 
             $fileImage->storeAs("", $nombreImagen.".".$fileImage->extension(), $this->disk);
             $fileVideo->storeAs("", $nombreVideo.".".$fileVideo->extension(), $this->disk);
@@ -82,9 +84,11 @@ class PeliculaController extends Controller
             $pelicula->ArchivoImagen = $nombreImagenBD;
             $pelicula->ArchivoVideo = $nombreVideoBD;
             $pelicula->save();
-
+            
+            return redirect()->route('admin.pelicula.index');
         }
 
-        return redirect()->route('admin.pelicula.index');
+        return redirect()->route('admin.pelicula.create');
+        
     }
 }

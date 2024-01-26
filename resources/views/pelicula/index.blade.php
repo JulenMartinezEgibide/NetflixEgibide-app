@@ -51,9 +51,10 @@
                     </div>
                     <div class="pelicula-card-body">
                         <img src="{{ $pelicula['ArchivoImagen'] }}" alt="Imagen de la pelicula">
+                        <video src="{{ $pelicula['ArchivoVideo'] }}" controls></video>
                     </div>
                     <div class="pelicula-card-footer">
-                        <a href="{{ route('pelicula.show', $pelicula['id']) }}" class="button-link">Ver</a>
+                        <a href="#" class="button-link">Ver</a>
                     </div>
                 </div>
             @endforeach
