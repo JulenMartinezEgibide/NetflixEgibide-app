@@ -30,13 +30,7 @@ class AuthController extends Controller
             // Persistir el usuario en la sesión
             $request->session()->put('user', $user);
 
-            // Redirigir según el tipo de usuario
-            if ($usuario->type == 'Admin') {
-                // Redirigir a la página de administrador pasando el tipo de usuario
-                return redirect()->route('admin.pelicula.index');
-            } else {
-                return redirect()->route('alumno.pelicula.index');
-            }
+            return redirect()->route('pelicula.index');
         }
 
         // Autenticación fallida

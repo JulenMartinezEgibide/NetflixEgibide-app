@@ -258,6 +258,84 @@ a.button-link:hover {
   color: #fff;
 }
 
+/*Cards*/
+.peliculas-grid {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.pelicula-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 10px;
+    width: 30%;
+    height: 300px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.pelicula-card-body {
+    width: 100%;
+    height: 200px;
+    border-radius: 10px 10px 0 0;
+}
+
+.pelicula-card-body img {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+}
+
+/*Pelicula*/
+
+.pelicula-details {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 40px;
+}
+
+.pelicula-image {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+}
+
+.pelicula-info {
+  width: 30%;
+
+}
+
+.info-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.info-item span:first-child {
+  font-weight: bold;
+}
+
+.info-buttons {
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 20px;
+}
 /*Footer*/
 footer {
     grid-area: footer;
@@ -293,4 +371,14 @@ footer {
 #search-button {
     margin-top: 10px; /* Agrega margen superior al elemento #search-button en versión de columna */
 }
+}
+
+@media screen and (max-width: 768px) {
+  .pelicula-details {
+      justify-content: center;
+  }
+
+  .pelicula-info {
+      max-width: 100%;
+  }
 }

@@ -27,14 +27,12 @@ Route::get('/login', [AuthController::class, 'index'])->name('login.index');
 // Ruta para procesar la autenticación
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
-// Rutas para el administrador
-Route::group(['prefix' => 'admin'], function () {
-    Route::get('/pelicula', [PeliculaController::class, 'index'])->name('admin.pelicula.index');
-    Route::get('/pelicula/create', [PeliculaController::class, 'create'])->name('admin.pelicula.create');
-    Route::post('/pelicula', [PeliculaController::class, 'store'])->name('admin.pelicula.store');
-});
+//Ruta de peliculas
+Route::get('/pelicula', [PeliculaController::class, 'index'])->name('pelicula.index');
+Route::get('/pelicula/create', [PeliculaController::class, 'create'])->name('pelicula.create');
+Route::post('/pelicula', [PeliculaController::class, 'store'])->name('pelicula.store');
+Route::get('/pelicula/{id}', [PeliculaController::class, 'show'])->name('pelicula.show');
+Route::delete('/pelicula/{id}', [PeliculaController::class, 'destroy'])->name('pelicula.destroy');
+Route::get('/pelicula/{id}/descarga', [PeliculaController::class, 'descargar'])->name('pelicula.descargar');
 
-// Rutas para el alumno
-Route::group(['prefix' => 'alumno'], function () {
-    Route::get('/pelicula',  [PeliculaController::class, 'index'])->name('alumno.pelicula.index');
-});
+//Ruta de alumnos

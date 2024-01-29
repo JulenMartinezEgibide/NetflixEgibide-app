@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Pelicula;
+use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -90,5 +91,60 @@ class PeliculaController extends Controller
 
         return redirect()->route('admin.pelicula.create');
         
+    }
+
+    public function show($id)
+{
+    // Tu lógica para mostrar la película con el ID proporcionado
+    $pelicula = Pelicula::find($id);
+
+    $rutaImagen = asset("storage/{$pelicula->ArchivoImagen}");
+    $rutaVideo = asset("storage/{$pelicula->ArchivoVideo}");
+
+    $datosPelicula = [
+        'Nombre' => $pelicula->Nombre,
+        'Categoria' => $pelicula->Categoria,
+        'Director' => $pelicula->Director,
+        'Duracion' => $pelicula->Duracion,
+        'ArchivoImagen' => $rutaImagen,
+        'ArchivoVideo' => $rutaVideo,
+        'id' => $pelicula->id,
+    ];
+
+    return view('pelicula.show', ['pelicula' => $datosPelicula]);
+}
+
+    public function destroy(Pelicula $pelicula)
+    {
+        // Lógica para eliminar la película con el ID proporcionado
+        $pelicula->delete();
+
+        //Eliminar los archivos del disco
+        Storage::disk($this->disk)->delete($pelicula->ArchivoImagen);
+        Storage::disk($this->disk)->delete($pelicula->ArchivoVideo);
+
+
+        return redirect()->route('admin.pelicula.index');
+    }
+
+    public function descargar($id){
+        // Lógica para descargar la película con el ID proporcionado
+        $pelicula = Pelicula::find($id);
+
+        //si la pelicula existe
+        if($pelicula){
+            //Coger el archivo de la pelicula del disco
+            $rutaVideo = $pelicula->ArchivoVideo;
+
+            //Usando el usuario la sesion, actualizamos la ultima_busqueda en la base de datos con el nombre de la pelicula de ese usuario
+            $usuario = Usuario::find(session('user')['id']);
+            $usuario->ultima_busqueda = $pelicula->Nombre;
+            $usuario->save();
+
+            //Descargar el archivo
+            return response()->download(storage_path("app/public/{$rutaVideo}"));
+        }
+
+        return redirect()->route('pelicula.index');
     }
 }

@@ -35,7 +35,7 @@
             <div class="admin-container">
                 <h2>Herramientas del administrador</h2>
                 <div class="admin-buttons">
-                    <a href="{{ route('admin.pelicula.create') }}" class="button-link">Añadir película</a>
+                    <a href="{{ route('pelicula.create') }}" class="button-link">Añadir película</a>
                 </div>
             </div>
         
@@ -51,10 +51,9 @@
                     </div>
                     <div class="pelicula-card-body">
                         <img src="{{ $pelicula['ArchivoImagen'] }}" alt="Imagen de la pelicula">
-                        <video src="{{ $pelicula['ArchivoVideo'] }}" controls></video>
                     </div>
                     <div class="pelicula-card-footer">
-                        <a href="#" class="button-link">Ver</a>
+                        <a href="{{ route('pelicula.show',['id' => $pelicula['id']]) }}" class="button-link">Ver</a>
                     </div>
                 </div>
             @endforeach
