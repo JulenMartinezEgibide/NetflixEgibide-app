@@ -33,6 +33,11 @@
     width: 100%;
   }
 
+  .grid-container.active{
+    margin-top: 60px;
+  }
+
+
   /* Content */
   .content-container {
     grid-area: content;
@@ -119,6 +124,13 @@
     height: fit-content;
   }
   
+  .navbar.active{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+
   .navbar-menu {
     display: flex;
     align-items: center;
@@ -294,6 +306,34 @@ a.button-link:hover {
     border-radius: 10px;
 }
 
+.usuario-grid {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.usuario-card {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 10px;
+  width: 30%;
+  margin: 10px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.usuario-card-body {
+  width: 100%;
+  border-radius: 10px 10px 0 0;
+}
+
+
 /*Pelicula*/
 
 .pelicula-details {
@@ -361,24 +401,70 @@ footer {
 
 .second-input-group {
     margin-right: 0;
-    margin-top: 10px; /* Espaciado superior para la versión de columna */
+    margin-top: 10px; 
 }
 
 #selector {
-    margin-bottom: 10px; /* Agrega margen inferior al elemento #selector en versión de columna */
+    margin-bottom: 10px; 
+    width: 100%;
+
 }
 
 #search-button {
-    margin-top: 10px; /* Agrega margen superior al elemento #search-button en versión de columna */
+    margin-top: 10px; 
 }
 }
 
 @media screen and (max-width: 768px) {
+
+
+  p, h4, h5, h6, a {
+    font-size: 12px;
+  }
+
+  h1, h2, h3 {
+    font-size: 15px;
+  }
+
   .pelicula-details {
       justify-content: center;
   }
 
   .pelicula-info {
       max-width: 100%;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 50%);
+    grid-template-rows: min-content min-content min-content 1fr min-content;
+    gap: 10px 0px;
+    grid-template-areas:
+        "nav nav"
+        "search search"
+        "admin admin"
+        "content content "
+        "footer footer ";
+    height: 100%;
+    width: 100%;
+}
+  .peliculas-grid {
+    flex-direction: column;
+      justify-content: center;
+  }
+
+  .pelicula-card {
+      width: 90%;
+  }
+
+  .usuario-grid {
+    flex-direction: column;
+      justify-content: center;
+  }
+
+  .usuario-card {
+      width: 90%;
   }
 }

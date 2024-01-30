@@ -5,6 +5,7 @@ use App\Http\Controllers\AlumnoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PeliculaController;
+use App\Http\Controllers\UsuarioController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,10 +30,17 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 //Ruta de peliculas
 Route::get('/pelicula', [PeliculaController::class, 'index'])->name('pelicula.index');
+Route::post('/pelicula/load', [PeliculaController::class, 'load'])->name('pelicula.load');
 Route::get('/pelicula/create', [PeliculaController::class, 'create'])->name('pelicula.create');
 Route::post('/pelicula', [PeliculaController::class, 'store'])->name('pelicula.store');
 Route::get('/pelicula/{id}', [PeliculaController::class, 'show'])->name('pelicula.show');
 Route::delete('/pelicula/{id}', [PeliculaController::class, 'destroy'])->name('pelicula.destroy');
 Route::get('/pelicula/{id}/descarga', [PeliculaController::class, 'descargar'])->name('pelicula.descargar');
 
-//Ruta de alumnos
+//Ruta de usuarios
+Route::get('/user', [UsuarioController::class, 'index'])->name('usuario.index');
+Route::post('/user/load', [UsuarioController::class, 'load'])->name('usuario.load');
+Route::get('/user/create', [UsuarioController::class, 'create'])->name('usuario.create');
+Route::post('/user', [UsuarioController::class, 'store'])->name('usuario.store');
+Route::get('/user/{id}', [UsuarioController::class, 'show'])->name('usuario.show');
+Route::delete('/user/{id}', [UsuarioController::class, 'destroy'])->name('usuario.destroy');

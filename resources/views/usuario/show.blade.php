@@ -20,35 +20,37 @@
     </nav>
     
     <div class="content-container">
-        <h2>Datos de la pelicula</h2>
+        <h2>Datos del usuario</h2>
         <div class="pelicula-details">
-            <img src="{{ $pelicula['ArchivoImagen'] }}" alt="{{ $pelicula['Nombre'] }}" class="pelicula-image">
+            
             <div class="pelicula-info">
                 <div class="info-title">
-                    <h3>{{ $pelicula['Nombre'] }}</h3>
+                    <h3>{{ $usuario['username'] }}</h3>
                 </div>
                 <div class="info-item">
-                    <span>Categoría:</span>
-                    <span>{{ $pelicula['Categoria'] }}</span>
+                    <span>Id:</span>
+                    <span>{{ $usuario['id'] }}</span>
                 </div>
                 <div class="info-item">
-                    <span>Director:</span>
-                    <span>{{ $pelicula['Director'] }}</span>
+                    <span>Contraseña:</span>
+                    <span>{{ $usuario['password'] }}</span>
                 </div>
                 <div class="info-item">
-                    <span>Duración:</span>
-                    <span>{{ $pelicula['Duracion'] }}</span>
+                    <span>Tipo cuenta:</span>
+                    <span>{{ $usuario['type'] }}</span>
+                </div>
+                <div class="info-item">
+                    <span>Ultima descarga:</span>
+                    <span>{{ $usuario['ultima_busqueda'] }}</span>
                 </div>
                 <div class="info-buttons">
                     @if(session('user') && session('user')['type'] == 'Admin')
-                    <form method="POST" action="{{ route('pelicula.destroy', ['id' => $pelicula['id']]) }}">
+                    <form method="POST" action="{{ route('usuario.destroy', ['id' => $usuario['id']]) }}">
                         @csrf
                         @method("DELETE")
-                    
                         <button type="submit">Eliminar</button>
                     </form>
                     @endif
-                    <a href="{{ route('pelicula.descargar', ['id' => $pelicula['id']]) }}" class="button-link">Descargar</a>
                 </div>
             </div>
         </div>

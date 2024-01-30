@@ -16,10 +16,12 @@ class PeliculaController extends Controller
     public function index()
     {
         // Lógica para la vista del dashboard del administrador
+        $listaPeliculas = [];
+
+        //
+
         //Coger los datos de las peliculas de la base de datos
         $peliculas = Pelicula::all();
-
-        $listaPeliculas = [];
 
         //Por cada pelicula, coger el Nombre, Categoria, ArchivoImagen y id
         foreach($peliculas as $pelicula){
@@ -37,9 +39,40 @@ class PeliculaController extends Controller
             ];
         }
 
+        return view('pelicula.index', ['peliculas' => $listaPeliculas]);
+    }
 
+    public function load(Request $request){
 
-        //$archivoImagen = Storage::disk($this->disk)->get('peliculas.json');
+        //Lógica para cargar las peliculas en la base de datos
+        $listaPeliculas = [];
+
+        //Si el metodo es post y el selector no es nulo
+        if($request->isMethod('post') && $request->input('selector') != null){
+
+            // Lógica para la vista del dashboard del administrador
+            
+
+            //Coger los datos de las peliculas de la base de datos
+            $peliculas = Pelicula::where('Categoria', $request->input('selector'))->get();
+
+            //Por cada pelicula, coger el Nombre, Categoria, ArchivoImagen y id
+            foreach($peliculas as $pelicula){
+
+                //Conseguir la url de la imgen de la pelicula del disco
+                $rutaImagen = asset("storage/{$pelicula->ArchivoImagen}");
+                $rutaVideo = asset("storage/{$pelicula->ArchivoVideo}");
+
+                $listaPeliculas[] = [
+                    'Nombre' => $pelicula->Nombre,
+                    'Categoria' => $pelicula->Categoria,
+                    'ArchivoImagen' => $rutaImagen,
+                    'ArchivoVideo' => $rutaVideo,
+                    'id' => $pelicula->id,
+                ];
+            
+            }
+        }
 
         return view('pelicula.index', ['peliculas' => $listaPeliculas]);
     }
@@ -53,7 +86,17 @@ class PeliculaController extends Controller
     public function store(Request $request)
     {
         // Lógica para guardar la película en la base de datos
-
+        
+        // Comprobar que los datos del formulario son correctos
+        $data = $request->validate([
+            'Nombre' => 'required|string',
+            'Categoria' => 'required|string',
+            'Director' => 'required|string',
+            'Duracion' => 'required|string',
+            'ArchivoImagen' => 'required|string',
+            'ArchivoVideo' => 'required|string',
+        ]);
+        
         if($request->isMethod('post') && $request->hasFile('img') && $request->hasFile('video')){
             $fileImage = $request->file('img');
             $fileVideo = $request->file('video');
@@ -86,10 +129,11 @@ class PeliculaController extends Controller
             $pelicula->ArchivoVideo = $nombreVideoBD;
             $pelicula->save();
             
-            return redirect()->route('admin.pelicula.index');
+            return redirect()->route('pelicula.index');
         }
 
-        return redirect()->route('admin.pelicula.create');
+        // Redireccionar a la vista del formulario de creación de películas avisando de que ha habido un error en una ventana emergente
+        return redirect()->route('pelicula.create')->with('error', 'Error al crear la película');
         
     }
 
@@ -114,17 +158,23 @@ class PeliculaController extends Controller
     return view('pelicula.show', ['pelicula' => $datosPelicula]);
 }
 
-    public function destroy(Pelicula $pelicula)
+    public function destroy($id)
     {
+
+        $pelicula = Pelicula::find($id);
         // Lógica para eliminar la película con el ID proporcionado
-        $pelicula->delete();
+        if ($pelicula) {
 
-        //Eliminar los archivos del disco
-        Storage::disk($this->disk)->delete($pelicula->ArchivoImagen);
-        Storage::disk($this->disk)->delete($pelicula->ArchivoVideo);
+            // Lógica para eliminar la película con el ID proporcionado
+            $pelicula->delete();
+    
+            // Eliminar los archivos del disco
+            Storage::disk($this->disk)->delete($pelicula->ArchivoImagen);
+            Storage::disk($this->disk)->delete($pelicula->ArchivoVideo);
+        }
 
 
-        return redirect()->route('admin.pelicula.index');
+        return redirect()->route('pelicula.index');
     }
 
     public function descargar($id){

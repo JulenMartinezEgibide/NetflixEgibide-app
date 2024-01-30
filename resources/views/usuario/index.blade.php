@@ -20,19 +20,13 @@
     </nav>
     
     <div class="search-container">
-        <h2>Busqueda por categoria</h2>
-        <form class="search-form" method="POST" action="{{ route('pelicula.load') }}">
+        <h2>Busqueda por tipo</h2>
+        <form class="search-form" method="POST" action="{{ route('usuario.load') }}">
             @csrf
             <div class="second-input-group">
                 <select name="selector" id="selector">
-                    <option value="Fantasia">Fantasia</option>
-                    <option value="Aventuras">Aventuras</option>
-                    <option value="Comedia">Comedia</option>
-                    <option value="Drama">Drama</option>
-                    <option value="Ciencia Ficcion">Ciencia Ficcion</option>
-                    <option value="Musical">Musical</option>
-                    <option value="Romance">Romance</option>
-                    <option value="Terror">Terror</option>
+                    <option value="Admin">Admin</option>
+                    <option value="Alumno">Alumno</option>
                 </select>
             </div>
             <button type="submit" id="search-button">Buscar</button>
@@ -44,25 +38,25 @@
             <div class="admin-container">
                 <h2>Herramientas del administrador</h2>
                 <div class="admin-buttons">
-                    <a href="{{ route('pelicula.create') }}" class="button-link">Añadir película</a>
+                    <a href="{{ route('usuario.create') }}" class="button-link">Añadir usuario</a>
                 </div>
             </div>
         
     @endif
 
     <div class="content-container">
-        <h2>Peliculas</h2>
-        <div class="peliculas-grid">
-            @foreach($peliculas as $pelicula)
-                <div class="pelicula-card">
-                    <div class="pelicula-card-header">
-                        <h3>{{ $pelicula['Nombre'] }}</h3>
+        <h2>Usuarios</h2>
+        <div class="usuario-grid">
+            @foreach($usuarios as $usuario)
+                <div class="usuario-card">
+                    <div class="usuario-card-header">
+                        <h3>{{ $usuario['username'] }}</h3>
                     </div>
-                    <div class="pelicula-card-body">
-                        <img src="{{ $pelicula['ArchivoImagen'] }}" alt="Imagen de la pelicula">
+                    <div class="usuario-card-body">
+                        <p>ID: {{ $usuario['id'] }}</p>
                     </div>
-                    <div class="pelicula-card-footer">
-                        <a href="{{ route('pelicula.show',['id' => $pelicula['id']]) }}" class="button-link">Ver</a>
+                    <div class="usuario-card-footer">
+                        <a href="{{ route('usuario.show',['id' => $usuario['id']]) }}" class="button-link">Ver</a>
                     </div>
                 </div>
             @endforeach
