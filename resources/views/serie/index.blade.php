@@ -11,7 +11,7 @@
     <nav class="navbar">
         <ul class="navbar-menu">
           <li class="navbar-item"><a href="{{ route('pelicula.index') }}" class="navbar-link">Peliculas</a></li>
-          <li class="navbar-item"><a href=" {{ route('serie.index') }} " class="navbar-link">Series</a></li>
+          <li class="navbar-item"><a href="#" class="navbar-link">Series</a></li>
           @if(session('user') && session('user')['type'] == 'Admin')
           <li class="navbar-item"><a href="{{ route('usuario.index') }}" class="navbar-link">Usuarios</a></li>
           @endif
@@ -21,7 +21,7 @@
     
     <div class="search-container">
         <h2>Busqueda por categoria</h2>
-        <form class="search-form" method="POST" action="{{ route('pelicula.load') }}">
+        <form class="search-form" method="POST" action="{{ route('serie.load') }}">
             @csrf
             <div class="second-input-group">
                 <select name="selector" id="selector">
@@ -44,25 +44,25 @@
             <div class="admin-container">
                 <h2>Herramientas del administrador</h2>
                 <div class="admin-buttons">
-                    <a href="{{ route('pelicula.create') }}" class="button-link">Añadir película</a>
+                    <a href="{{ route('serie.create') }}" class="button-link">Añadir serie</a>
                 </div>
             </div>
         
     @endif
 
     <div class="content-container">
-        <h2>Peliculas</h2>
+        <h2>Series</h2>
         <div class="peliculas-grid">
-            @foreach($peliculas as $pelicula)
+            @foreach($series as $serie)
                 <div class="pelicula-card">
                     <div class="pelicula-card-header">
-                        <h3>{{ $pelicula['Nombre'] }}</h3>
+                        <h3>{{ $serie['Nombre'] }}</h3>
                     </div>
                     <div class="pelicula-card-body">
-                        <img src="{{ $pelicula['ArchivoImagen'] }}" alt="Imagen de la pelicula">
+                        <img src="{{ $serie['ArchivoImagen'] }}" alt="Imagen de la pelicula">
                     </div>
                     <div class="pelicula-card-footer">
-                        <a href="{{ route('pelicula.show',['id' => $pelicula['id']]) }}" class="button-link">Ver</a>
+                        <a href="{{ route('serie.show',['id' => $serie['id']]) }}" class="button-link">Ver</a>
                     </div>
                 </div>
             @endforeach

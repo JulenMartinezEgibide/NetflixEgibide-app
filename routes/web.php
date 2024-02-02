@@ -4,7 +4,9 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AlumnoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\EpisodioController;
 use App\Http\Controllers\PeliculaController;
+use App\Http\Controllers\SerieController;
 use App\Http\Controllers\UsuarioController;
 
 /*
@@ -44,3 +46,22 @@ Route::get('/user/create', [UsuarioController::class, 'create'])->name('usuario.
 Route::post('/user', [UsuarioController::class, 'store'])->name('usuario.store');
 Route::get('/user/{id}', [UsuarioController::class, 'show'])->name('usuario.show');
 Route::delete('/user/{id}', [UsuarioController::class, 'destroy'])->name('usuario.destroy');
+
+//Ruta series
+Route::get('/serie', [SerieController::class, 'index'])->name('serie.index');
+Route::post('/serie/load', [SerieController::class, 'load'])->name('serie.load');
+Route::get('/serie/create', [SerieController::class, 'create'])->name('serie.create');
+Route::post('/serie', [SerieController::class, 'store'])->name('serie.store');
+Route::get('/serie/{id}', [SerieController::class, 'show'])->name('serie.show');
+Route::delete('/serie/{id}', [SerieController::class, 'destroy'])->name('serie.destroy');
+Route::get('/serie/{id}/descarga', [SerieController::class, 'descargar'])->name('serie.descargar');
+
+//Ruta episodios
+Route::prefix('serie/{id}/episodio')->group(function () {
+    Route::get('create', [EpisodioController::class, 'create'])->name('episodio.create');
+    Route::post('create', [EpisodioController::class, 'store'])->name('episodio.store');
+    Route::get('{id_ep}', [EpisodioController::class, 'show'])->name('episodio.show');
+    Route::delete('{id_ep}', [EpisodioController::class, 'destroy'])->name('episodio.destroy');
+    Route::get('{id_ep}/descarga', [EpisodioController::class, 'descargar'])->name('episodio.descargar');
+
+});
