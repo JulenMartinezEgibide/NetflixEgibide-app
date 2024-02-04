@@ -1,26 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Netflix</title>
     @vite(['resources/css/styles.css', 'resources/js/app.js'])
 </head>
+
 <body>
     <div class="form-container">
         <form class="general-form" method="POST" action="{{ route('pelicula.store') }}" enctype="multipart/form-data">
-          @csrf
-          <h1>Egibide Netflix</h1>
-          <p>Formulario para películas</p>
-          <div class="input-group">
-            <input type="text" id="Nombre" name="Nombre" placeholder="Titulo" required>
-          </div>
-          <div class="input-group">
-            <input type="text" id="Director" name="Director" placeholder="Director" required>
-          </div>
-          <div class="input-group">
-            <input type="text" id="Duracion" name="Duracion" placeholder="Duracion" required>
-          </div>
+            @csrf
+            <h1>Egibide Netflix</h1>
+            <p>Formulario para películas</p>
+            <div class="input-group">
+                <input type="text" id="Nombre" name="Nombre" placeholder="Titulo" required>
+            </div>
+            <div class="input-group">
+                <input type="text" id="Director" name="Director" placeholder="Director" required>
+            </div>
+            <div class="input-group">
+                <input type="text" id="Duracion" name="Duracion" placeholder="Duracion" required>
+            </div>
             <div class="input-group">
                 <p>Seleccionar categoria:</p>
                 <select name="Categoria" id="Categoria">
@@ -46,10 +48,11 @@
             </div>
             <div class="input-group">
                 <button type="submit">Añadir</button>
-            
+
                 <a href=" {{ route('pelicula.store') }} " class="button-link">Volver</a>
             </div>
         </form>
-      </div>
+    </div>
 </body>
+
 </html>
