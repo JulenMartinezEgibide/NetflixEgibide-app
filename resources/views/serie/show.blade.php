@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    @vite(['resources/css/styles.css', 'resources/js/app.js'])
+    <title>Netflix</title>
+    @vite(['resources/css/styles.css', 'resources/js/app.js','resources/js/nav.js'])
 </head>
 <body>
     <div class="grid-container">
     <nav class="navbar">
         <ul class="navbar-menu">
-          <li class="navbar-item"><a href="{{ route('pelicula.index') }}" class="navbar-link">Peliculas</a></li>
-          <li class="navbar-item"><a href="#" class="navbar-link">Series</a></li>
+          <li class="navbar-item"><a href="{{ route('pelicula.index') }}" class="navbar-link">Películas</a></li>
+          <li class="navbar-item"><a href=" {{ route('serie.index') }} " class="navbar-link">Series</a></li>
           @if(session('user') && session('user')['type'] == 'Admin')
           <li class="navbar-item"><a href="{{ route('usuario.index') }}" class="navbar-link">Usuarios</a></li>
           @endif
-          <li class="navbar-item navbar-item-right"><a href=" {{ route('login.index') }} " class="navbar-link">Cerrar sesion</a></li>
+          <li class="navbar-item navbar-item-right"><a href=" {{ route('login.index') }} " class="navbar-link">Cerrar sesión</a></li>
         </ul>
     </nav>
 
@@ -68,10 +68,10 @@
             @foreach($episodios as $episodio)
                 <div class="pelicula-card">
                     <div class="pelicula-card-header">
-                        <h3>{{ $episodio['Nombre'] }}</h3>
+                        <h3>{{ $episodio['Nombre_episodio'] }}</h3>
                     </div>
                     <div class="pelicula-card-body">
-                        <!--<img src="{{ $episodio['ArchivoImagen'] }}" alt="Imagen de la episodio">-->
+                        <img src="{{ asset("storage/{$episodio->ArchivoImagen}") }}" alt="Imagen de la episodio">
                     </div>
                     <div class="pelicula-card-footer">
                         <a href="{{ route('episodio.show',['id' => $serie['id'],'id_ep' => $episodio['id']]) }}" class="button-link">Ver</a>
@@ -83,7 +83,7 @@
     </div>
 
     <footer class="footer">
-        <p>&copy; 2023 My Website. All rights reserved.</p>
+        <p>&copy; 2024 Egibide Netflix. All rights reserved.</p>
     </footer>
     </div>
 </body>

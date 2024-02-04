@@ -31,13 +31,13 @@ Route::get('/login', [AuthController::class, 'index'])->name('login.index');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 //Ruta de peliculas
-Route::get('/pelicula', [PeliculaController::class, 'index'])->name('pelicula.index');
-Route::post('/pelicula/load', [PeliculaController::class, 'load'])->name('pelicula.load');
-Route::get('/pelicula/create', [PeliculaController::class, 'create'])->name('pelicula.create');
-Route::post('/pelicula', [PeliculaController::class, 'store'])->name('pelicula.store');
-Route::get('/pelicula/{id}', [PeliculaController::class, 'show'])->name('pelicula.show');
-Route::delete('/pelicula/{id}', [PeliculaController::class, 'destroy'])->name('pelicula.destroy');
-Route::get('/pelicula/{id}/descarga', [PeliculaController::class, 'descargar'])->name('pelicula.descargar');
+Route::get('/peliculas', [PeliculaController::class, 'index'])->name('pelicula.index');
+Route::post('/peliculas/load', [PeliculaController::class, 'load'])->name('pelicula.load');
+Route::get('/peliculas/create', [PeliculaController::class, 'create'])->name('pelicula.create');
+Route::post('/peliculas', [PeliculaController::class, 'store'])->name('pelicula.store');
+Route::get('/peliculas/{id}', [PeliculaController::class, 'show'])->name('pelicula.show');
+Route::delete('/peliculas/{id}', [PeliculaController::class, 'destroy'])->name('pelicula.destroy');
+Route::get('/peliculas/{id}/descarga', [PeliculaController::class, 'descargar'])->name('pelicula.descargar');
 
 //Ruta de usuarios
 Route::get('/user', [UsuarioController::class, 'index'])->name('usuario.index');
@@ -48,16 +48,16 @@ Route::get('/user/{id}', [UsuarioController::class, 'show'])->name('usuario.show
 Route::delete('/user/{id}', [UsuarioController::class, 'destroy'])->name('usuario.destroy');
 
 //Ruta series
-Route::get('/serie', [SerieController::class, 'index'])->name('serie.index');
-Route::post('/serie/load', [SerieController::class, 'load'])->name('serie.load');
-Route::get('/serie/create', [SerieController::class, 'create'])->name('serie.create');
-Route::post('/serie', [SerieController::class, 'store'])->name('serie.store');
-Route::get('/serie/{id}', [SerieController::class, 'show'])->name('serie.show');
-Route::delete('/serie/{id}', [SerieController::class, 'destroy'])->name('serie.destroy');
-Route::get('/serie/{id}/descarga', [SerieController::class, 'descargar'])->name('serie.descargar');
+Route::get('/series', [SerieController::class, 'index'])->name('serie.index');
+Route::post('/series/load', [SerieController::class, 'load'])->name('serie.load');
+Route::get('/series/create', [SerieController::class, 'create'])->name('serie.create');
+Route::post('/series', [SerieController::class, 'store'])->name('serie.store');
+Route::get('/series/{id}', [SerieController::class, 'show'])->name('serie.show');
+Route::delete('/series/{id}', [SerieController::class, 'destroy'])->name('serie.destroy');
+Route::get('/series/{id}/descarga', [SerieController::class, 'descargar'])->name('serie.descargar');
 
 //Ruta episodios
-Route::prefix('serie/{id}/episodio')->group(function () {
+Route::prefix('series/{id}/episodio')->group(function () {
     Route::get('create', [EpisodioController::class, 'create'])->name('episodio.create');
     Route::post('create', [EpisodioController::class, 'store'])->name('episodio.store');
     Route::get('{id_ep}', [EpisodioController::class, 'show'])->name('episodio.show');

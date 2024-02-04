@@ -26,21 +26,23 @@ class EpisodioController extends Controller
                 'Nombre' => 'required|string|max:255',
                 'Descripcion' => 'required|string|max:255',
                 'Duracion' => 'required|string|max:255',
+                'ArchivoImagen' => 'required|string|max:255',
                 'ArchivoVideo' => 'required|string|max:255',
                 'video' => 'required|file|mimes:mp4',
             ]);
 
-            if($request->isMethod('post') && $request->hasFile('video')){
+            if($request->isMethod('post') && $request->hasFile('video') && $request->hasFile('img')){
 
+                $fileImg = $request->file('img');
                 $fileVideo = $request->file('video');
                 
-               
+                $nombreImg = $request->input('ArchivoImagen');
                 $nombreVideo = $request->input('ArchivoVideo');
     
-                
+                $fileImg->storeAs("", $nombreImg.".".$fileImg->extension(), $this->disk);
                 $fileVideo->storeAs("", $nombreVideo.".".$fileVideo->extension(), $this->disk);
     
-               
+                $nombreImgBD = $nombreImg.".".$fileImg->extension();
                 $nombreVideoBD = $nombreVideo.".".$fileVideo->extension();
     
         
@@ -48,6 +50,7 @@ class EpisodioController extends Controller
                 $episodio->Nombre_episodio = $datosEpisodio['Nombre'];
                 $episodio->Descripcion = $datosEpisodio['Descripcion'];
                 $episodio->Duracion = $datosEpisodio['Duracion'];
+                $episodio->ArchivoImagen = $nombreImgBD;
                 $episodio->ArchivoVideo = $nombreVideoBD;
                 $episodio->serie_id = $id_serie;
                 $episodio->save();
@@ -72,12 +75,14 @@ class EpisodioController extends Controller
 
     $serie = Serie::find($episodio->serie_id);
 
+    $rutaImagen = asset("storage/{$episodio->ArchivoImagen}");
     $rutaVideo = asset("storage/{$episodio->ArchivoVideo}");
 
     $datosEpisodio = [
         'Nombre' => $episodio->Nombre_episodio,
         'Descripcion' => $episodio->Descripcion,
         'Duracion' => $episodio->Duracion,
+        'ArchivoImagen' => $rutaImagen,
         'ArchivoVideo' => $rutaVideo,
         'id' => $episodio->id,
     ];

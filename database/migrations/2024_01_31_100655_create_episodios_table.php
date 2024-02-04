@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('Nombre_episodio');
             $table->string('Descripcion');
             $table->string('Duracion');
+            $table->string('ArchivoImagen');
             $table->string('ArchivoVideo');
             $table->timestamps();
         });

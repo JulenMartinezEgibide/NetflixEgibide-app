@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Netflix</title>
     @vite(['resources/css/styles.css', 'resources/js/app.js'])
 </head>
 <body>
-    <div class="login-container">
-        <form class="login-form" method="POST" action="{{ route('usuario.store') }}">
+    <div class="form-container">
+        <form class="general-form" method="POST" action="{{ route('usuario.store') }}">
           @csrf
           <h1>Egibide Netflix</h1>
           <p>Formulario para usuarios</p>
