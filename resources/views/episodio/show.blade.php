@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Netflix</title>
-    @vite(['resources/css/styles.css', 'resources/js/app.js', 'resources/js/nav.js'])
+    @vite(['resources/css/styles.css', 'resources/js/app.js', 'resources/js/nav.js','resources/js/download.js'])
 </head>
 
 <body>

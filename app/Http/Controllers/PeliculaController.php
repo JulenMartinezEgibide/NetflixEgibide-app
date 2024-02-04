@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Pelicula;
 use App\Models\Usuario;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -24,7 +25,7 @@ class PeliculaController extends Controller
         $peliculas = Pelicula::all();
 
         //Por cada pelicula, coger el Nombre, Categoria, ArchivoImagen y id
-        foreach($peliculas as $pelicula){
+        foreach ($peliculas as $pelicula) {
 
             //Conseguir la url de la imgen de la pelicula del disco
             $rutaImagen = asset("storage/{$pelicula->ArchivoImagen}");
@@ -42,22 +43,23 @@ class PeliculaController extends Controller
         return view('pelicula.index', ['peliculas' => $listaPeliculas]);
     }
 
-    public function load(Request $request){
+    public function load(Request $request)
+    {
 
         //Lógica para cargar las peliculas en la base de datos
         $listaPeliculas = [];
 
         //Si el metodo es post y el selector no es nulo
-        if($request->isMethod('post') && $request->input('selector') != null){
+        if ($request->isMethod('post') && $request->input('selector') != null) {
 
             // Lógica para la vista del dashboard del administrador
-            
+
 
             //Coger los datos de las peliculas de la base de datos
             $peliculas = Pelicula::where('Categoria', $request->input('selector'))->get();
 
             //Por cada pelicula, coger el Nombre, Categoria, ArchivoImagen y id
-            foreach($peliculas as $pelicula){
+            foreach ($peliculas as $pelicula) {
 
                 //Conseguir la url de la imgen de la pelicula del disco
                 $rutaImagen = asset("storage/{$pelicula->ArchivoImagen}");
@@ -70,7 +72,6 @@ class PeliculaController extends Controller
                     'ArchivoVideo' => $rutaVideo,
                     'id' => $pelicula->id,
                 ];
-            
             }
         }
 
@@ -86,77 +87,99 @@ class PeliculaController extends Controller
     public function store(Request $request)
     {
         // Lógica para guardar la película en la base de datos
-        
+
         // Comprobar que los datos del formulario son correctos
-        $data = $request->validate([
-            'Nombre' => 'required|string',
+        $data =  [
+            'Nombre' => 'required|string|max:30|regex:/^[A-Z][a-zA-Z\s]+$/',
+            'Director' => 'required|string|max:30|regex:/^[A-Z][a-zA-Z\s]+$/',
+            'Duracion' => 'required|string|regex:/^\d{2}:\d{2}:\d{2}$/',
             'Categoria' => 'required|string',
-            'Director' => 'required|string',
-            'Duracion' => 'required|string',
-            'ArchivoImagen' => 'required|string',
-            'ArchivoVideo' => 'required|string',
-        ]);
-        
-        if($request->isMethod('post') && $request->hasFile('img') && $request->hasFile('video')){
+            'ArchivoVideo' => 'required|string|max:30|regex:/^[A-Z][a-zA-Z\s]+$/',
+            'video' => 'required|mimes:mp4,avi,mov', // Ajusta las extensiones de archivo según tus necesidades
+            'ArchivoImagen' => 'required|string|max:30|regex:/^[A-Z][a-zA-Z\s]+$/',
+            'img' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Ajusta las extensiones de archivo según tus necesidades
+        ];
+
+        $mensajes = [
+            'Nombre.regex' => 'El campo Título debe empezar por una letra mayúscula y contener solo letras sin números.',
+            'Nombre.max' => 'El campo Título no puede tener más de 30 caracteres.',
+            'Director.regex' => 'El campo Director debe empezar por una letra mayúscula y contener solo letras sin números.',
+            'Director.max' => 'El campo Director no puede tener más de 30 caracteres.',
+            'Duracion.regex' => 'El campo Duración debe tener el formato 00:00:00.',
+            'Categoria.in' => 'Selecciona una categoría válida.',
+            'ArchivoVideo.regex' => 'El campo Nombre del Video debe empezar por una letra mayúscula y contener solo letras sin números.',
+            'ArchivoVideo.max' => 'El campo Nombre del Video no puede tener más de 30 caracteres.',
+            'video.mimes' => 'El archivo de video debe ser de tipo mp4, mov o avi.',
+            'ArchivoImagen.regex' => 'El campo Nombre de la Imagen debe empezar por una letra mayúscula y contener solo letras sin números.',
+            'ArchivoImagen.max' => 'El campo Nombre de la Imagen no puede tener más de 30 caracteres.',
+            'img.mimes' => 'El archivo de imagen debe ser de tipo jpeg, png, jpg o gif.',
+        ];
+
+        $validador = Validator::make($request->all(), $data, $mensajes);
+
+        if ($request->isMethod('post') && $request->hasFile('img') && $request->hasFile('video') && $validador->fails() == false) {
+
             $fileImage = $request->file('img');
             $fileVideo = $request->file('video');
-            
+
             $nombreImagen = $request->input('ArchivoImagen');
             $nombreVideo = $request->input('ArchivoVideo');
 
-            $fileImage->storeAs("", $nombreImagen.".".$fileImage->extension(), $this->disk);
-            $fileVideo->storeAs("", $nombreVideo.".".$fileVideo->extension(), $this->disk);
+            $nombreImagenBD = $nombreImagen . "." . $fileImage->extension();
+            $nombreVideoBD = $nombreVideo . "." . $fileVideo->extension();
 
-            $nombreImagenBD = $nombreImagen.".".$fileImage->extension();
-            $nombreVideoBD = $nombreVideo.".".$fileVideo->extension();
+            //si ya existe una pelicula con ese nombre en el disco, añaadir un numero al final en $nombreImagenBD y $nombreVideoBD como en $nombreImagen y $nombreVideo
+            $i = 1;
+            while (Storage::disk($this->disk)->exists($nombreImagenBD)) {
+                $nombreImagenBD = $nombreImagen . $i . "." . $fileImage->extension();
+                $i++;
+            }
+            while (Storage::disk($this->disk)->exists($nombreVideoBD)) {
+                $nombreVideoBD = $nombreVideo . $i . "." . $fileVideo->extension();
+                $i++;
+            }
 
-            $data = $request->validate([
-                'Nombre' => 'required|string',
-                'Categoria' => 'required|string',
-                'Director' => 'required|string',
-                'Duracion' => 'required|string',
-                'ArchivoImagen' => 'required|string',
-                'ArchivoVideo' => 'required|string',
-            ]);
-    
+            $fileImage->storeAs("", $nombreImagenBD, $this->disk);
+            $fileVideo->storeAs("", $nombreVideoBD, $this->disk);
+
+
             // Crear un nuevo usuario
             $pelicula = new Pelicula();
-            $pelicula->Nombre = $data['Nombre'];
-            $pelicula->Categoria = $data['Categoria'];
-            $pelicula->Director = $data['Director'];
-            $pelicula->Duracion = $data['Duracion'];
+            $pelicula->Nombre = $request->input('Nombre');
+            $pelicula->Categoria = $request->input('Categoria');
+            $pelicula->Director = $request->input('Director');
+            $pelicula->Duracion = $request->input('Duracion');
             $pelicula->ArchivoImagen = $nombreImagenBD;
             $pelicula->ArchivoVideo = $nombreVideoBD;
             $pelicula->save();
-            
+
             return redirect()->route('pelicula.index');
         }
 
         // Redireccionar a la vista del formulario de creación de películas avisando de que ha habido un error en una ventana emergente
-        return redirect()->route('pelicula.create')->with('error', 'Error al crear la película');
-        
+        return redirect()->route('pelicula.create')->withErrors($validador);
     }
 
     public function show($id)
-{
-    // Tu lógica para mostrar la película con el ID proporcionado
-    $pelicula = Pelicula::find($id);
+    {
+        // Tu lógica para mostrar la película con el ID proporcionado
+        $pelicula = Pelicula::find($id);
 
-    $rutaImagen = asset("storage/{$pelicula->ArchivoImagen}");
-    $rutaVideo = asset("storage/{$pelicula->ArchivoVideo}");
+        $rutaImagen = asset("storage/{$pelicula->ArchivoImagen}");
+        $rutaVideo = asset("storage/{$pelicula->ArchivoVideo}");
 
-    $datosPelicula = [
-        'Nombre' => $pelicula->Nombre,
-        'Categoria' => $pelicula->Categoria,
-        'Director' => $pelicula->Director,
-        'Duracion' => $pelicula->Duracion,
-        'ArchivoImagen' => $rutaImagen,
-        'ArchivoVideo' => $rutaVideo,
-        'id' => $pelicula->id,
-    ];
+        $datosPelicula = [
+            'Nombre' => $pelicula->Nombre,
+            'Categoria' => $pelicula->Categoria,
+            'Director' => $pelicula->Director,
+            'Duracion' => $pelicula->Duracion,
+            'ArchivoImagen' => $rutaImagen,
+            'ArchivoVideo' => $rutaVideo,
+            'id' => $pelicula->id,
+        ];
 
-    return view('pelicula.show', ['pelicula' => $datosPelicula]);
-}
+        return view('pelicula.show', ['pelicula' => $datosPelicula]);
+    }
 
     public function destroy($id)
     {
@@ -167,7 +190,7 @@ class PeliculaController extends Controller
 
             // Lógica para eliminar la película con el ID proporcionado
             $pelicula->delete();
-    
+
             // Eliminar los archivos del disco
             Storage::disk($this->disk)->delete($pelicula->ArchivoImagen);
             Storage::disk($this->disk)->delete($pelicula->ArchivoVideo);
@@ -177,12 +200,13 @@ class PeliculaController extends Controller
         return redirect()->route('pelicula.index');
     }
 
-    public function descargar($id){
+    public function descargar($id)
+    {
         // Lógica para descargar la película con el ID proporcionado
         $pelicula = Pelicula::find($id);
 
         //si la pelicula existe
-        if($pelicula){
+        if ($pelicula) {
             //Coger el archivo de la pelicula del disco
             $rutaVideo = $pelicula->ArchivoVideo;
 

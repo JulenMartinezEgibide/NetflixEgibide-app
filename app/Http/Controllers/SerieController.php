@@ -7,23 +7,24 @@ use App\Models\Usuario;
 use App\Models\Episodio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class SerieController extends Controller
 {
-    
+
     private $disk = 'public';
 
     public function index()
     {
 
         $listaSeries = [];
-        
+
         $series = Serie::all();
 
-        
-        foreach($series as $serie){
 
-            
+        foreach ($series as $serie) {
+
+
             $rutaImagen = asset("storage/{$serie->ArchivoImagen}");
 
             $listaSeries[] = [
@@ -38,20 +39,21 @@ class SerieController extends Controller
         return view('serie.index', ['series' => $listaSeries]);
     }
 
-    public function load(Request $request){
+    public function load(Request $request)
+    {
 
-        
+
         $listaSeries = [];
 
-        
-        if($request->isMethod('post') && $request->input('selector') != null){
+
+        if ($request->isMethod('post') && $request->input('selector') != null) {
 
             $series = Serie::where('Categoria', $request->input('selector'))->get();
 
-            
-            foreach($series as $serie){
 
-                
+            foreach ($series as $serie) {
+
+
                 $rutaImagen = asset("storage/{$serie->ArchivoImagen}");
 
                 $listaSeries[] = [
@@ -61,7 +63,6 @@ class SerieController extends Controller
                     'ArchivoImagen' => $rutaImagen,
                     'id' => $serie->id,
                 ];
-            
             }
         }
 
@@ -75,74 +76,86 @@ class SerieController extends Controller
 
     public function store(Request $request)
     {
-        
-        $data = $request->validate([
-            'Nombre' => 'required|string',
+
+        $data = [
+            'Nombre' => 'required|string|max:30|regex:/^[A-Z][a-zA-Z\s]+$/',
+            'Director' => 'required|string|max:30|regex:/^[A-Z][a-zA-Z\s]+$/',
             'Categoria' => 'required|string',
-            'Director' => 'required|string',
-            'ArchivoImagen' => 'required|string',
-        ]);
-        
-        if($request->isMethod('post') && $request->hasFile('img')){
+            'ArchivoImagen' => 'required|string|max:30|regex:/^[A-Z][a-zA-Z\s]+$/',
+            'img' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Ajusta las extensiones de archivo según tus necesidades
+        ];
+
+        $mensajes = [
+            'Nombre.regex' => 'El campo Título debe empezar por una letra mayúscula y contener solo letras sin números.',
+            'Nombre.max' => 'El campo Título no puede tener más de 30 caracteres.',
+            'Director.regex' => 'El campo Director debe empezar por una letra mayúscula y contener solo letras sin números.',
+            'Director.max' => 'El campo Director no puede tener más de 30 caracteres.',
+            'Categoria.in' => 'Selecciona una categoría válida.',
+            'ArchivoImagen.regex' => 'El campo Nombre de la Imagen debe empezar por una letra mayúscula y contener solo letras sin números.',
+            'ArchivoImagen.max' => 'El campo Nombre de la Imagen no puede tener más de 30 caracteres.',
+            'img.mimes' => 'El archivo de imagen debe ser de tipo jpeg, png, jpg o gif.',
+        ];
+
+        $validador = Validator::make($request->all(), $data, $mensajes);
+
+        if ($request->isMethod('post') && $request->hasFile('img') && $validador->fails() == false) {
             $fileImage = $request->file('img');
-            
+
             $nombreImagen = $request->input('ArchivoImagen');
 
-            $fileImage->storeAs("", $nombreImagen.".".$fileImage->extension(), $this->disk);
+            $nombreImagenBD = $nombreImagen . "." . $fileImage->extension();
 
-            $nombreImagenBD = $nombreImagen.".".$fileImage->extension();
+            $i = 1;
+            while (Storage::disk($this->disk)->exists($nombreImagenBD)) {
+                $nombreImagenBD = $nombreImagen . $i . "." . $fileImage->extension();
+                $i++;
+            }
 
-            $data = $request->validate([
-                'Nombre' => 'required|string',
-                'Categoria' => 'required|string',
-                'Director' => 'required|string',
-                'ArchivoImagen' => 'required|string',
-            ]);
-    
-            
+            $fileImage->storeAs("", $nombreImagenBD, $this->disk);
+
+
             $serie = new Serie();
-            $serie->Nombre_serie = $data['Nombre'];
-            $serie->Categoria = $data['Categoria'];
-            $serie->Director = $data['Director'];
+            $serie->Nombre_serie = $request->input('Nombre');
+            $serie->Categoria = $request->input('Categoria');
+            $serie->Director = $request->input('Director');
             $serie->ArchivoImagen = $nombreImagenBD;
             $serie->save();
-            
+
             return redirect()->route('serie.index');
         }
 
-       
-        return redirect()->route('serie.create')->with('error', 'Error al crear la película');
-        
+
+        return redirect()->route('serie.create')->withErrors($validador);
     }
 
     public function show($id)
-{
-    
-    $serie = Serie::find($id);
+    {
 
-    $rutaImagen = asset("storage/{$serie->ArchivoImagen}");
+        $serie = Serie::find($id);
 
-    $datosSerie = [
-        'Nombre' => $serie->Nombre_serie,
-        'Categoria' => $serie->Categoria,
-        'Director' => $serie->Director,
-        'ArchivoImagen' => $rutaImagen,
-        'id' => $serie->id,
-    ];
+        $rutaImagen = asset("storage/{$serie->ArchivoImagen}");
 
-    return view('serie.show', ['serie' => $datosSerie, 'episodios' => $serie->episodios]);
-}
+        $datosSerie = [
+            'Nombre' => $serie->Nombre_serie,
+            'Categoria' => $serie->Categoria,
+            'Director' => $serie->Director,
+            'ArchivoImagen' => $rutaImagen,
+            'id' => $serie->id,
+        ];
+
+        return view('serie.show', ['serie' => $datosSerie, 'episodios' => $serie->episodios]);
+    }
 
     public function destroy($id)
     {
 
         $serie = Serie::find($id);
         //$episodios = Episodio::where('id_serie', $id)->get();
-        
+
         if ($serie) {
 
             $serie->delete();
-    
+
             Storage::disk($this->disk)->delete($serie->ArchivoImagen);
             /*foreach($episodios as $episodio){
                 Storage::disk($this->disk)->delete($episodio->ArchivoVideo);
@@ -153,22 +166,22 @@ class SerieController extends Controller
         return redirect()->route('pelicula.index');
     }
 
-    public function descargar($id){
-       
+    public function descargar($id)
+    {
+
         $serie = Serie::find($id);
         $episodios = Episodio::where('serie_id', $id)->get();
-        
-        if($serie){
-        
-            foreach($episodios as $episodio){
+
+        if ($serie) {
+
+            foreach ($episodios as $episodio) {
                 $rutaVideo = $episodio->ArchivoVideo;
                 return response()->download(storage_path("app/public/{$rutaVideo}"));
             }
-            
+
             $usuario = Usuario::find(session('user')['id']);
             $usuario->ultima_busqueda = $serie->Nombre_serie;
             $usuario->save();
-
         }
 
         return redirect()->route('pelicula.index');

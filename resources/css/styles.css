@@ -54,7 +54,7 @@ body {
   margin: 15px;
 }
 
-/* Login */
+/* fomrs */
 .form-container {
   background-color: #fff;
   border-radius: 10px;
@@ -393,6 +393,42 @@ footer {
   text-align: center;
   padding: 20px;
   height: fit-content;
+}
+
+/*Alerts*/
+.alert {
+  background-color: #f2dede;
+  border: 1px solid #ebccd1;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.alert h4 {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+
+.alert ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.alert li {
+  margin-bottom: 5px;
+  color: #777;
+}
+
+.alert-danger {
+  background-color: #f2dede;
+  border-color: #ebccd1;
+  color: #a94442;
+}
+
+.alert-danger li {
+  color: #a94442;
 }
 
 /* Responsive */
