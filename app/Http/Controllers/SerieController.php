@@ -150,20 +150,21 @@ class SerieController extends Controller
     {
 
         $serie = Serie::find($id);
-        //$episodios = Episodio::where('id_serie', $id)->get();
+        $episodios = Episodio::all()->where('serie_id', $id);
 
         if ($serie) {
 
             $serie->delete();
 
             Storage::disk($this->disk)->delete($serie->ArchivoImagen);
-            /*foreach($episodios as $episodio){
+            foreach($episodios as $episodio){
+                Storage::disk($this->disk)->delete($episodio->ArchivoImagen);
                 Storage::disk($this->disk)->delete($episodio->ArchivoVideo);
-            }*/
+            }
         }
 
 
-        return redirect()->route('pelicula.index');
+        return redirect()->route('serie.index');
     }
 
     public function descargar($id)

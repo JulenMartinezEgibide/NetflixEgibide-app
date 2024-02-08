@@ -122,6 +122,7 @@ class EpisodioController extends Controller
             //Eliminar el episodio 
             $episodio->delete();
 
+            Storage::disk($this->disk)->delete($episodio->ArchivoImagen);
             Storage::disk($this->disk)->delete($episodio->ArchivoVideo);
         }
 
