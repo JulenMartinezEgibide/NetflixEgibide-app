@@ -169,21 +169,37 @@ class SerieController extends Controller
     public function descargar($id)
     {
 
+        //Descargar todos los episodios de la serie con el ID proporcionado
         $serie = Serie::find($id);
-        $episodios = Episodio::where('serie_id', $id)->get();
+        $episodios = Episodio::all()->where('serie_id', $id);
 
         if ($serie) {
-
-            foreach ($episodios as $episodio) {
-                $rutaVideo = $episodio->ArchivoVideo;
-                return response()->download(storage_path("app/public/{$rutaVideo}"));
-            }
 
             $usuario = Usuario::find(session('user')['id']);
             $usuario->ultima_busqueda = $serie->Nombre_serie;
             $usuario->save();
+
+            $zip = new \ZipArchive();
+            $zipFileName = $serie->Nombre_serie . ".zip";
+            $zip->open($zipFileName, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+
+            foreach ($episodios as $episodio) {
+                $rutaVideo = $episodio->ArchivoVideo;
+                $zip->addFile(storage_path("app/public/{$rutaVideo}"), $episodio->Nombre_episodio . ".mp4");
+            }
+
+            $zip->close();
+
+            return response()->download($zipFileName)->deleteFileAfterSend(true);
+            
+            //Borrar el archivo zip en la carpeta public
+            unlink($zipFileName);
+
+
         }
 
-        return redirect()->route('pelicula.index');
+        
+
+        return redirect()->route('serie.index');
     }
 }

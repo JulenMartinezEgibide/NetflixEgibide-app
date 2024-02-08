@@ -29,6 +29,17 @@ class UsuariosSeeder extends Seeder
             'type' => 'Alumno',
         ]);
 
+        //generar 10 usuarios con type alumno usando modelo usuario
+
+        \App\Models\Usuario::factory(10)->create([
+            'type' => 'Alumno',
+        ]);
+
+        //generar 10 usuarios con type admin usando modelo usuario
+
+        \App\Models\Usuario::factory(10)->create([
+            'type' => 'Admin',
+        ]);
             
     }
 }

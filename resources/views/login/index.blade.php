@@ -20,6 +20,20 @@
             <div class="input-group">
                 <input type="password" id="password" name="password" placeholder="Password" required>
             </div>
+            @if ($errors->any())
+                <div class="input-group">
+
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+
+                </div>
+                
+            @endif
             <button type="submit">Login</button>
         </form>
     </div>

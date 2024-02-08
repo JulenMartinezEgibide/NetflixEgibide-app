@@ -95,9 +95,9 @@ class UsuarioController extends Controller
 
             // Crear un nuevo usuario
             $usuario = new Usuario();
-            $usuario->username = $data['username'];
-            $usuario->password = $data['password'];
-            $usuario->type = $data['Categoria'];
+            $usuario->username = $request->input('username');
+            $usuario->password = $request->input('password');
+            $usuario->type = $request->input('type');
             $usuario->ultima_busqueda = null;
             $usuario->save();
 

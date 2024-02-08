@@ -19,8 +19,6 @@ class PeliculaController extends Controller
         // Lógica para la vista del dashboard del administrador
         $listaPeliculas = [];
 
-        //
-
         //Coger los datos de las peliculas de la base de datos
         $peliculas = Pelicula::all();
 
@@ -100,6 +98,7 @@ class PeliculaController extends Controller
             'img' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Ajusta las extensiones de archivo según tus necesidades
         ];
 
+        //Mensajes de error personalizados
         $mensajes = [
             'Nombre.regex' => 'El campo Título debe empezar por una letra mayúscula y contener solo letras sin números.',
             'Nombre.max' => 'El campo Título no puede tener más de 30 caracteres.',
@@ -125,6 +124,7 @@ class PeliculaController extends Controller
             $nombreImagen = $request->input('ArchivoImagen');
             $nombreVideo = $request->input('ArchivoVideo');
 
+            //Añadir la extensión al nombre de la imagen y el video
             $nombreImagenBD = $nombreImagen . "." . $fileImage->extension();
             $nombreVideoBD = $nombreVideo . "." . $fileVideo->extension();
 
@@ -143,7 +143,7 @@ class PeliculaController extends Controller
             $fileVideo->storeAs("", $nombreVideoBD, $this->disk);
 
 
-            // Crear un nuevo usuario
+            // Crear una nueva película
             $pelicula = new Pelicula();
             $pelicula->Nombre = $request->input('Nombre');
             $pelicula->Categoria = $request->input('Categoria');
