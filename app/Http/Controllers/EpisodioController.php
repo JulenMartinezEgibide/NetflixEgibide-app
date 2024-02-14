@@ -81,6 +81,7 @@ class EpisodioController extends Controller
             $episodio->ArchivoImagen = $nombreImagenBD;
             $episodio->ArchivoVideo = $nombreVideoBD;
             $episodio->serie_id = $id_serie;
+            $episodio->save();
 
             return redirect()->route('serie.index');
         }
